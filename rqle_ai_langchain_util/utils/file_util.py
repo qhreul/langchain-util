@@ -77,3 +77,21 @@ def read_image(image_path: str) -> base64:
         raise FileNotFoundError(f'{image_path} not found')
     except Exception as e:
         raise IOError(f'Error reading {image_path}: {e}')
+
+
+def write_file(file_dir: str, file_name: str, file_content: str) -> None:
+    """
+    :param file_dir: Directory in which JSON file is stored
+    :param file_name: Name of the file
+    :param file_content: Content of the file
+    :return: None
+    """
+    output_file = Path(os.path.join(file_dir, file_name))
+    # test whether the file is a directory
+    if output_file.is_dir():
+        raise IsADirectoryError(f'{output_file} is not a file')
+    try:
+        with output_file.open('w') as f:
+            f.write(file_content)
+    except Exception as e:
+        raise IOError(f'Error writing {file_name}: {e}')

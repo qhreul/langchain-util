@@ -71,11 +71,10 @@ with ((input)):
                                     raise IOError(input_error_msg)
                             # execute the LLM to generate the blog
                             tech_type_rocket = TechTypeRocket(config_folder='techtype_rocket')
-                            generated_blog = tech_type_rocket.invoke_chain(target_reading_time=target_reading_time,
+                            generated_blog_data = tech_type_rocket.invoke_chain(target_reading_time=target_reading_time,
                                                                            target_audience=target_audience,
                                                                            topic=topic,
                                                                            keywords=keywords)
-                            generated_blog_data = generated_blog['text']
                             # check whether guard rails should be checked on the output
                             if guard_rails_enabled:
                                 output_is_valid, output_error_msg = llm_guard_validator.validate_llm_output(prompt=f'Generate a blog post about "{topic}" targeting {target_audience} '

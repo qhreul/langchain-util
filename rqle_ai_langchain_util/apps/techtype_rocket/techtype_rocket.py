@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 
-from langchain.chains import LLMChain
 from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
 from rqle_ai_langchain_util import settings
 from rqle_ai_langchain_util.llms.adapters.llm_adapters import LLMAdapter
@@ -28,6 +28,7 @@ class TechTypeRocket:
     def __init__(self, config_folder: str):
         # configure the LLM to be executed
         self.config_folder = config_folder
+        self.parser = StrOutputParser()
         self.llm_mediator = LLMMediator(LLMAdapter.OLLAMA_AI, self.config_folder)
 
     def load_chain(self):
@@ -41,7 +42,8 @@ class TechTypeRocket:
             logger.debug(f'Generated prompt: {prompt}')
 
             # return the LLM
-            return LLMChain(llm=self.llm_mediator.model, prompt=prompt)
+            chain = prompt | self.llm_mediator.model | self.parser
+            return chain
         except Exception as e:
             logger.error(f'Error loading chain: {self.config_folder}\n{e}', exc_info=True)
             raise e

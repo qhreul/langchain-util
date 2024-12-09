@@ -18,6 +18,11 @@ The output should include the following:
 * Keywords: Provide a list of SEO keywords that reflects the content of the podcast.
 
 ## 4. Strict Compliance
+When writing, please ensure:
+* The tone is authoritative, engaging, and optimistic.
+* The content is insightful and informative, providing value to the reader.
+* Ethical considerations are discussed, showcasing commitment to responsible AI.
+
 Write your response in Markdown.
 Do *not* include any information that is not found in the user input.
 
