@@ -1,12 +1,12 @@
 {
   "version": 1,
   "type": "chat",
-  "model_name": "gemma2:latest",
+  "model_name": "phi3:14b-instruct",
   "parameters": {
     "max_tokens": 8000,
     "temperature": 0.3,
     "top_p": 0.1,
     "presence_penalty": 0.0,
-    "frequency_penalty": 0.0
+    "frequency_penalty": 0.5
   }
 }
