@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rqle-ai-langchain-util"
-version = "0.4.0a0"
+version = "0.4.0"
 description = "Library facilitating the integration of different LLM providers in LangChain (e.g. `ollama`, `Google Gemini`, etc)."
 license = "Apache-2.0"
 authors = ["Quentin Reul <Quentin.H.Reul@gmail.com>"]
