@@ -7,34 +7,44 @@ from rqle_ai_langchain_util.prompts.prompt_example import PromptExample
 from rqle_ai_langchain_util.settings import PROMPT_CONFIG_FOLDER
 from rqle_ai_langchain_util.utils.file_util import file_exists, read_file
 
+# Constants
+PROMPT_TXT_FILE = 'prompt.txt'
+EXAMPLE_JSON_FILE = 'example.json'
+
 
 class LLMMediator:
 
-    def info(self) -> str:
-        """
-        :return: the name of the class
-        """
-        return self.__class__.__name__
-
-    def __init__(self, llm_adapter: LLMAdapter, prompt_config_name: str):
+    def __init__(self, llm_adapter: LLMAdapter, prompt_config_name: str = None):
         """
         :param llm_adapter: Adapter for the execution of the LLM
         :param prompt_config_name: Name of the prompt
         """
         self._llm_adapter = llm_adapter
         self._prompt_name = prompt_config_name
+        self._prompt_config_path = f'{PROMPT_CONFIG_FOLDER}/{self._prompt_name}'
+
         # populate the prompt config
-        self._prompt_config = PromptConfig.from_json(f'{PROMPT_CONFIG_FOLDER}/{prompt_config_name}')
-        # populate the prompt template
-        if file_exists(f'{PROMPT_CONFIG_FOLDER}/{prompt_config_name}', 'prompt.json'):
-            self._prompt_template = PromptTemplate.from_json(f'{PROMPT_CONFIG_FOLDER}/{prompt_config_name}')
+        if self._prompt_name is not None:
+            self._prompt_config = PromptConfig.from_json(self._prompt_config_path)
+
+            # populate the prompt template
+            if file_exists(self._prompt_config_path, PROMPT_TXT_FILE):
+                self._prompt_template = PromptTemplate.from_text(
+                    read_file(file_dir=self._prompt_config_path, file_name=PROMPT_TXT_FILE))
+            else:
+                # need to return an error
+                pass
+
+            # populate the prompt example
+            if file_exists(self._prompt_config_path, EXAMPLE_JSON_FILE):
+                self._prompt_example = PromptExample.from_json(self._prompt_config_path)
+            self._model = _load_model(llm_adapter, self._prompt_config)
         else:
-            self._prompt_template = PromptTemplate.from_text(read_file(file_dir=f'{PROMPT_CONFIG_FOLDER}/{prompt_config_name}',
-                                                                       file_name='prompt.txt'))
-        # populate the prompt example
-        if file_exists(f'{PROMPT_CONFIG_FOLDER}/{prompt_config_name}', 'example.json'):
-            self._prompt_example = PromptExample.from_json(f'{PROMPT_CONFIG_FOLDER}/{prompt_config_name}')
-        self._model = _load_model(llm_adapter, self._prompt_config)
+            self._prompt_config = None
+            self._prompt_template = None
+            self._prompt_example = None
+            self._model = None
+
 
     @property
     def prompt_name(self) -> str:
@@ -44,11 +54,26 @@ class LLMMediator:
         return self._prompt_name
 
     @property
+    def prompt_config_path(self) -> str:
+        """
+        :return: Path to prompt configuration
+        """
+        return self._prompt_config_path
+
+    @property
     def prompt_config(self) -> PromptConfig:
         """
         :return: Prompt configuration
         """
         return self._prompt_config
+
+    @prompt_config.setter
+    def prompt_config(self, prompt_config: PromptConfig):
+        """
+        :param prompt_config: Prompt configuration
+        """
+        self._prompt_config = prompt_config
+        self._model = _load_model(self._llm_adapter, self._prompt_config)
 
     @property
     def prompt_template(self) -> PromptTemplate:
@@ -56,6 +81,13 @@ class LLMMediator:
         :return: Prompt template
         """
         return self._prompt_template
+
+    @prompt_template.setter
+    def prompt_template(self, prompt_text: str):
+        """
+        :param prompt_text: text of the prompt
+        """
+        self._prompt_template = PromptTemplate.from_text(prompt_text)
 
     @property
     def prompt_example(self) -> PromptExample:
