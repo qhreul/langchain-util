@@ -1,6 +1,17 @@
 # Information about the different providers supported by AWS Bedrock -
 # https://us-west-2.console.aws.amazon.com/bedrock/home
+
+# The following models only supports "chat" as the model type:
+# * us.amazon.nova-lite-v1:0
+# * us.anthropic.claude-3-5-sonnet-20241022-v2:0
+
+# The following models only support "completion" as the model type:
+# * cohere.command-r-plus-v1:0
+
+# mistral models have an issue with their handling - Error occurred while generating the blog: 'NoneType' object is not subscriptable
+
 import os
+import re
 from dotenv import load_dotenv
 
 from langchain_aws.llms.bedrock import BedrockLLM
@@ -14,49 +25,50 @@ load_dotenv()
 
 def _get_model_kwargs(config: PromptConfig):
     """
+    Amazon Bedrock has shifted to inference profile IDs / ARNs to identify different models
     :param config: the configuration for the LLM execution
     :return: the model arguments relevant for different models supported in AWS bedrock
     """
-    provider = config.model_name.split('.')[0]
-    if provider == 'ai21':
+    # us.amazon.nova-* models are only supported for chat
+    if re.match('^(?:[a-z]{2}\.)?amazon\.*', config.model_name):
         return {
             "maxTokens": config.parameters.max_tokens,
             "temperature": config.parameters.temperature,
-            "topP": config.parameters.top_p,
-            "presencePenalty":{"scale": config.parameters.presence_penalty},
-            "frequencyPenalty":{"scale": config.parameters.frequency_penalty}
-        }
-    elif provider == 'amazon':
-        # TODO investigate '/basic-syntax/' text when using completion
-        return {
-            "maxTokenCount": config.parameters.max_tokens,
-            "temperature": config.parameters.temperature,
             "topP": config.parameters.top_p
         }
-    elif provider == 'cohere':
+    # Anthropic models (e.g. us.anthropic.claude-* or anthropic.claude-*) only support chat types
+    elif re.match('^(?:[a-z]{2}\.)?anthropic\.*', config.model_name):
         return {
             "max_tokens": config.parameters.max_tokens,
             "temperature": config.parameters.temperature,
-            "p": config.parameters.top_p
+            "top_p": config.parameters.top_p,
+            "top_k": config.parameters.top_k
         }
-    elif provider == 'meta':
-        # TODO investigate why parameters work in direct call, but not when passed through UI
-        # Malformed input request: #: extraneous key [max_gen_length] is not permitted
+    # Issue with supporting cohere models - #: extraneous key [prompt] is not permitted
+    # Issue doesn't seem to be related to inclusion of '#' in prompt
+    #elif re.match('^(?:[a-z]{2}\.)?cohere\.*', config.model_name):
+    #    return {
+    #        "max_tokens": config.parameters.max_tokens,
+    #        "temperature": config.parameters.temperature,
+    #        "p": config.parameters.top_p
+    #    }
+    elif re.match('^(?:[a-z]{2}\.)?meta\.*', config.model_name):
         return {
             "max_gen_len": config.parameters.max_tokens,
             "temperature": config.parameters.temperature,
             "top_p": config.parameters.top_p
         }
-    elif provider == 'mistral':
-        # TODO investigating issue with mistral model
-        # Malformed input request: #: required key [prompt] not found#: extraneous key [inputText] is not permitted
+    # Known Issue with some of the mistral models running on AWS Bedrock
+    # * mistral.mixtral-8x7b-instruct-v0:1 - An error occurred (ValidationException) when calling the InvokeModel operation: Validation Error
+    # * mistral.mistral-large-2407-v1:0 - Error occurred while generating the blog: 'NoneType' object is not subscriptable
+    elif re.match('^(?:[a-z]{2}\.)?mistral\.*', config.model_name):
         return {
             "max_tokens": config.parameters.max_tokens,
             "temperature": config.parameters.temperature,
             "top_p": config.parameters.top_p
         }
     else:
-        raise NotImplementedError(f'LLM provider {provider} not supported')
+        raise NotImplementedError(f'{config.model_name} is not supported')
 
 
 def _load_aws_bedrock_llm_from_prompt_config(config: PromptConfig):

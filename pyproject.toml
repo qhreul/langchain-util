@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rqle-ai-langchain-util"
-version = "0.4.2"
+version = "0.5.0"
 description = "Library facilitating the integration of different LLM providers in LangChain (e.g. `ollama`, `Google Gemini`, etc)."
 license = "Apache-2.0"
 authors = ["Quentin Reul <Quentin.H.Reul@gmail.com>"]
@@ -13,7 +13,7 @@ keywords = ["langchain", "generative ai", "llm"]
 "Bug Tracker" = "https://github.com/RQledotai/rqle-ai-langchain-util/issues"
 
 [tool.poetry.dependencies]
-boto3 = "^1.35"
+boto3 = "^1.36"
 google-generativeai = "^0.8"
 huggingface-hub = "^0.27"
 langchain = "^0.3"
@@ -22,7 +22,7 @@ langchain-community = "^0.3"
 langchain-aws = "^0.2"
 langchain-google-genai = "^2"
 langchain-ollama = "^0.2"
-langchain_openai = "^0.2"
+langchain_openai = "^0.3"
 llm-guard = "^0.3"
 moviepy = "^2"
 oci="^2.139"

@@ -11,6 +11,8 @@ class ExecutionParameters(BaseModel):
                                default=0.0, ge=0.0, le=1.0)
     top_p: float = Field(description='top_p controls the range of tokens considered by the LLM',
                          default=0.0, ge=0.0, le=1.0)
+    top_k: int = Field(description='top_k limits the number of most likely tokens to consider when generating a response',
+                         default=0, ge=0)
     presence_penalty: float = Field(description='Presence penalty aims at including a diverse range of tokens '
                                                 'in the generated text', default=0.0, ge=0.0, le=1.0)
     frequency_penalty: float = Field(description='Frequency penalty aims at discouraging from repeating the '
