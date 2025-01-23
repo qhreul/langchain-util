@@ -1,19 +1,27 @@
-[tool.poetry]
+[project]
 name = "rqle-ai-langchain-util"
 version = "0.5.0"
 description = "Library facilitating the integration of different LLM providers in LangChain (e.g. `ollama`, `Google Gemini`, etc)."
 license = "Apache-2.0"
-authors = ["Quentin Reul <Quentin.H.Reul@gmail.com>"]
+requires-python = ">=3.11,<3.12"
+authors = [
+    {name = "RQle.ai"},
+    {name = "Quentin Reul", email = "Quentin.H.Reul@gmail.com>" }
+]
 readme = "README.md"
-homepage = "https://www.linkedin.com/company/102641077"
 keywords = ["langchain", "generative ai", "llm"]
+classifiers = [
+    "Programming Language :: Python"
+]
 
 [project.urls]
-"Source Code" = "https://github.com/RQledotai/rqle-ai-langchain-util"
+Homepage = "https://www.linkedin.com/company/102641077"
+Repository = "https://github.com/RQledotai/rqle-ai-langchain-util.git"
 "Bug Tracker" = "https://github.com/RQledotai/rqle-ai-langchain-util/issues"
 
 [tool.poetry.dependencies]
 boto3 = "^1.36"
+coverage-badge = "^1"
 google-generativeai = "^0.8"
 huggingface-hub = "^0.27"
 langchain = "^0.3"
@@ -29,7 +37,6 @@ oci="^2.139"
 plotly = "^5.20"
 pocketsphinx = "^5"
 pydub = "^0.25"
-python = ">=3.11,<3.12"
 python-dotenv = "^1"
 pytube = "^15"
 speechrecognition = "^3.10"

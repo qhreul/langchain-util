@@ -8,26 +8,24 @@
 </div>
 
 <p align="center">
-  <a href="https://www.python.org/downloads/release/python-3114/">
-    <img src="https://img.shields.io/badge/python-3.11.4-blue.svg"/>
+  <a href="https://www.python.org/downloads/release/python-31111/">
+    <img alt="python" src="https://img.shields.io/badge/python-3.11-blue.svg"/>
   </a>
   <a href="https://python-poetry.org/">
-    <img src="https://img.shields.io/badge/dependency-poetry-%B2EA00"/>
+    <img alt="poetry" src="https://img.shields.io/pypi/v/poetry?label=poetry">
   </a>
-  <a href="https://github.com/langchain-ai/langchain">
-    <img src="https://img.shields.io/badge/dependency-LangChain-%B2EA00"/>
+  <a href="https://pypi.org/project/langchain-core/">
+    <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/langchain-core?label=langchain-core">
   </a>
-  <a href="https://github.com/protectai/llm-guard">
-    <img src="https://img.shields.io/badge/dependency-llm_guard-%B2EA00"/>
-  </a>
-  <a href="https://github.com/traceloop/openllmetry">
-    <img src="https://img.shields.io/badge/dependency-OpenLLMetry-%B2EA00"/>
-  </a>
-  <a href="https://github.com/streamlit/streamlit">
-    <img src="https://img.shields.io/badge/dependency-streamlit-%B2EA00"/>
-  </a>
+  <br/>
+  <a href="https://pypi.org/project/rqle-ai-langchain-util/">
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/RQledotai/rqle-ai-langchain-util"/>
+  </a> 
+  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/RQledotai/rqle-ai-langchain-util"/>
+  <br/>
+  <img alt="Test Coverage" src="img/test_coverage.svg"/>
   <a href="https://github.com/qhreul/langchain-util/blob/develop/LICENSE">
-    <img src="https://img.shields.io/pypi/l/giteo"/>
+    <img src="https://img.shields.io/pypi/l/rqle-ai-langchain-util"/>
   </a>
 </p>
 
@@ -62,13 +60,8 @@ To get started refer to the [documentation](docs/get_started/introduction.md).
 
 ### Requirements <a name="requirements"></a>
 * Git
-* llm-guard >= 0.3
-* langchain >= 0.3
-* traceloop-sdk >= 0.33
-* Python = 3.11 
-* Poetry >= 1.8.4
-* streamlit >= 1.32
-
+* Python >=3.11, <3.12 
+* Poetry >= 2
 
 ### Environment Variables <a name="environment-variables"></a>
 | **Name**                 | **Description**                                                                | **Default**     |
